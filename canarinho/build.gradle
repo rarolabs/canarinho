@@ -11,8 +11,8 @@ ext {
     artifact = 'canarinho'
 
     libraryDescription = 'Utilitários Android para padrões Brasileiros'
-    siteUrl = 'https://github.com/concretesolutions/canarinho'
-    gitUrl = 'https://github.com/concretesolutions/canarinho.git'
+    siteUrl = 'https://github.com/rarolabs/canarinho'
+    gitUrl = 'https://github.com/rarolabs/canarinho.git'
     libraryVersion = '2.0.4'
 
     developerId = 'cs-victor-nascimento'
