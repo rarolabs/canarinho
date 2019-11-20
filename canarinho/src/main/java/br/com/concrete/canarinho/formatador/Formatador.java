@@ -47,12 +47,17 @@ public interface Formatador {
     /**
      * Singleton de formatação de valores monetários.
      */
-    FormatadorValor VALOR = FormatadorValor.getInstance(false);
+    FormatadorValor VALOR = FormatadorValor.getInstance(false, false);
 
     /**
      * Singleton de formatação de valores monetários com símbolo do Real.
      */
-    FormatadorValor VALOR_COM_SIMBOLO = FormatadorValor.getInstance(true);
+    FormatadorValor VALOR_COM_SIMBOLO = FormatadorValor.getInstance(true, false);
+
+    /**
+     * Singleton de formatação de valores monetários com símbolo do Real e limite de 5 casas de inteiros.
+     */
+    FormatadorValor VALOR_COM_SIMBOLO_E_LIMITE = FormatadorValor.getInstance(true, true);
 
     /**
      * Singleton de formatação de boletos bancários.

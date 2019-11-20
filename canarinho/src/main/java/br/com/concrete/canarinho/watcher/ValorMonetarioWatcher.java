@@ -18,12 +18,13 @@ public class ValorMonetarioWatcher implements TextWatcher {
     private final boolean mantemZerosAoLimpar;
     private final Formatador formatador;
     private boolean mudancaInterna;
+    private final boolean limiteDeCasas;
 
     /**
      * Constrói uma instância sem símbolo de Real (R$).
      */
     public ValorMonetarioWatcher() {
-        this(false, true);
+        this(false, true, false);
     }
 
     /**
@@ -32,11 +33,14 @@ public class ValorMonetarioWatcher implements TextWatcher {
      * @param comSimboloReal      Flag para acrescentar ou não o símbolo
      * @param mantemZerosAoLimpar Sempre que não houver números (apagar em lote) manter zeros
      */
-    ValorMonetarioWatcher(boolean comSimboloReal, boolean mantemZerosAoLimpar) {
-        this.formatador = comSimboloReal
+    ValorMonetarioWatcher(boolean comSimboloReal, boolean mantemZerosAoLimpar, boolean comLimiteDeCasas) {
+        this.formatador = comSimboloReal && !comLimiteDeCasas
                 ? Formatador.VALOR_COM_SIMBOLO
+                : comLimiteDeCasas
+                ? Formatador.VALOR_COM_SIMBOLO_E_LIMITE
                 : Formatador.VALOR;
         this.mantemZerosAoLimpar = mantemZerosAoLimpar;
+        this.limiteDeCasas = comLimiteDeCasas;
     }
 
     @Override
@@ -101,6 +105,7 @@ public class ValorMonetarioWatcher implements TextWatcher {
 
         private boolean mantemZerosAoLimpar;
         private boolean simboloReal;
+        private boolean comLimiteDeCasas;
 
         /**
          * Manterá os zeros ao limpar o campo.
@@ -123,12 +128,23 @@ public class ValorMonetarioWatcher implements TextWatcher {
         }
 
         /**
+         * Inclui o símbolo de real na formatação
+         * e limite de 5 casas de inteiros.
+         *
+         * @return this Fluent interface
+         */
+        public Builder comLimiteDeCasas() {
+            this.comLimiteDeCasas = true;
+            return this;
+        }
+
+        /**
          * Constrói a instância
          *
          * @return Watcher para ser usado
          */
         public ValorMonetarioWatcher build() {
-            return new ValorMonetarioWatcher(simboloReal, mantemZerosAoLimpar);
+            return new ValorMonetarioWatcher(simboloReal, mantemZerosAoLimpar, comLimiteDeCasas);
         }
     }
 }

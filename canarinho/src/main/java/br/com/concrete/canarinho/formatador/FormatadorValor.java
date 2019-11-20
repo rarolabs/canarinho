@@ -28,6 +28,8 @@ public final class FormatadorValor implements Formatador {
 
     private static final String SIMBOLO_REAL = "R$ ";
 
+    private final boolean adicionaSimboloReal;
+
     static {
         final DecimalFormatSymbols decimalSymbols = FORMATADOR_MOEDA.getDecimalFormatSymbols();
         decimalSymbols.setCurrencySymbol("");
@@ -39,10 +41,11 @@ public final class FormatadorValor implements Formatador {
         FORMATADOR_MOEDA.setParseBigDecimal(true);
     }
 
-    private final boolean adicionaSimboloReal;
-
     // No instance creation
-    private FormatadorValor(boolean comSimboloReal) {
+    private FormatadorValor(boolean comSimboloReal, boolean comLimite) {
+        if (comLimite) {
+            FORMATADOR_MOEDA.setMaximumIntegerDigits(5);
+        }
         adicionaSimboloReal = comSimboloReal;
     }
 
@@ -52,9 +55,11 @@ public final class FormatadorValor implements Formatador {
      * @param comSimboloReal Flag para saber qual instância buscar.
      * @return FormatadorValor de acordo com a flag
      */
-    static FormatadorValor getInstance(boolean comSimboloReal) {
-        return comSimboloReal
+    static FormatadorValor getInstance(boolean comSimboloReal, boolean comLimite) {
+        return comSimboloReal && !comLimite
                 ? SingletonHolder.INSTANCE_COM_SIMBOLO
+                : comLimite
+                ? SingletonHolder.INSTANCE_COM_SIMBOLO_E_LIMITE
                 : SingletonHolder.INSTANCE_SEM_SIMBOLO;
     }
 
@@ -106,7 +111,8 @@ public final class FormatadorValor implements Formatador {
     }
 
     private static class SingletonHolder {
-        private static final FormatadorValor INSTANCE_SEM_SIMBOLO = new FormatadorValor(false);
-        private static final FormatadorValor INSTANCE_COM_SIMBOLO = new FormatadorValor(true);
+        private static final FormatadorValor INSTANCE_SEM_SIMBOLO = new FormatadorValor(false, false);
+        private static final FormatadorValor INSTANCE_COM_SIMBOLO = new FormatadorValor(true, false);
+        private static final FormatadorValor INSTANCE_COM_SIMBOLO_E_LIMITE = new FormatadorValor(true, true);
     }
 }
