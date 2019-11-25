@@ -1,57 +1,25 @@
 apply plugin: 'com.android.library'
-apply from: "$rootDir/tools/linters/linters.gradle"
-apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.rarolabs'
-
-ext {
-    bintrayRepo = 'concrete-maven'
-    bintrayName = 'canarinho'
-    bintrayUserOrg = 'concrete'
-
-    publishedGroupId = 'br.com.concrete'
-    libraryName = 'Android Canarinho'
-    artifact = 'canarinho'
-
-    libraryDescription = 'Utilitários Android para padrões Brasileiros'
-    siteUrl = 'https://github.com/rarolabs/canarinho'
-    gitUrl = 'https://github.com/rarolabs/canarinho.git'
-    libraryVersion = '2.0.5'
-
-    developerId = 'cs-victor-nascimento'
-    developerName = 'Victor Oliveira Nascimento'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.1"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 27
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        debug {}
-        release {}
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 }
 
 dependencies {
 }
 
-// Configura publicação
-def localProps = project.rootProject.file('local.properties')
-
-if (localProps.exists()) {
-    Properties properties = new Properties()
-    properties.load(localProps.newDataInputStream())
-    def user = properties.getProperty('bintray.user')
-    def apikey = properties.getProperty('bintray.apikey')
-
-    if (user && apikey)
-        apply from: 'publica.gradle'
-}
 
